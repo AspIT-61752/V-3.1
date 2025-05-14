@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+
+<body class="bg-light">
+    <header class="bg-info w-100">
+        <nav>
+            <p>Navi</p>
+        </nav>
+    </header>
+    <main class="container-md">
+        <h1>Title</h1>
+        <section>
+            <form>
+                <div class="row g-2 my-1">
+                    <label class="form-label" for="nameInput">Navn</label>
+                    <input type="text" class="form-control" id="nameInput" placeholder="Navn">
+                </div>
+
+                <div class="row g-2 my-1">
+                    <label class="form-label" for="emailInput">Email</label>
+                    <input type="email" class="form-control" id="emailInput" placeholder="Email">
+                </div>
+
+                <div class="row g-2 my-1">
+                    <label class="form-label" for="beskedInput">Besked</label>
+                    <textarea class="form-control" id="beskedInput" rows="6"></textarea>
+                </div>
+
+                <div class="row g-2 my-1">
+                    <div class="form-check">
+                        <label class="form-check-label" for="checkInput">Email</label>
+                        <input type="checkbox" class="form-check-inline" id="checkInput">
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label" for="checkInput2">Email</label>
+                        <input type="checkbox" class="form-check-inline" id="checkInput2" disabled>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+    <footer class="bg-info w-100 fixed-bottom">
+        <p class="m-0">
+            Footer
+        </p>
+    </footer>
+</body>
+
+</html>
+
+<script src="./js/bootstrap.bundle.min.js"></script>
