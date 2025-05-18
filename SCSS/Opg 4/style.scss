@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
+$font-main: "Open Sans", sans-serif;
+$font-secondary: "Ubuntu", sans-serif;
+$color-heading: hsl(220, 43%, 30%);
+$color-bg: hsl(40, 43%, 82%);
+
+@mixin imagegrid($columns, $margin) {
+	width: calc((100% - (#{$columns} * #{$margin})) / #{$columns+1});
+	margin: $margin;
+	float: left;
+
+	&:nth-child(#{$columns}n) {
+		margin-right: 0;
+		margin-bottom: $margin;
+	}
+}
+
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	padding: 1rem;
+	margin: 0;
+	background-color: $color-bg;
+	font-family: $font-main;
+	h1 {
+		padding-bottom: 2rem;
+		font-family: $font-secondary;
+		color: $color-heading;
+	}
+}
+
+.imagegrid {
+	.item {
+		float: left;
+		@include imagegrid(3, 1%); // Default mobil
+
+		img {
+			max-width: 100%;
+			border-radius: 15px;
+		}
+	}
+}
+
+@media (min-width: 600px) {
+	.imagegrid {
+		.item {
+			@include imagegrid(7, 2%);
+		}
+	}
+}
