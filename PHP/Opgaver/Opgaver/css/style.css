@@ -1,0 +1,299 @@
+@import url("https://fonts.googleapis.com/css?family=PT+Sans+Narrow|Ubuntu&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: auto;
+  font-family: "PT Sans Narrow", Helvetica, Arial, Sans-serif;
+  background-color: hsl(39, 58%, 95%);
+}
+
+header {
+  position: relative;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 190px;
+  position: fixed;
+  padding: 10px;
+  top: 50px;
+  background-color: hsla(0, 0%, 100%, 0.6);
+}
+.side img {
+  margin-bottom: 4vh;
+  width: 100%;
+}
+.side ul {
+  list-style-type: none;
+}
+.side ul li {
+  display: block;
+  padding: 2vh 0;
+}
+.side ul a {
+  font-size: 1.4rem;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: hsl(0, 20%, 14%);
+}
+
+.top {
+  background-image: linear-gradient(#dd7878, hsl(0, 60%, 34%));
+  color: hsl(39, 58%, 95%);
+  width: inherit;
+  height: 50px;
+  position: fixed;
+  z-index: 10;
+}
+.top ul {
+  text-decoration: none;
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.top ul li {
+  display: inline-block;
+  padding: 0 0.5vw;
+  font-size: 1.2rem;
+}
+.top ul li:nth-child(4) {
+  margin-right: auto;
+}
+.top ul li a {
+  text-decoration: none;
+  color: hsl(39, 58%, 95%);
+}
+.top ul li:last-child {
+  padding-left: 0;
+}
+.top ul img {
+  opacity: 0.5;
+  padding-top: 5px;
+  width: 2vw;
+}
+.top ul .carticon {
+  padding-right: 0.3vw;
+}
+.top ul .carticon img {
+  transform: scale(0.8);
+}
+
+.content, .aboutus {
+  margin-left: 220px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 50px;
+}
+.content header img, .aboutus header img {
+  max-width: 100%;
+}
+
+.aboutus p {
+  margin: 1rem 0;
+}
+.aboutus ul {
+  list-style-position: inside;
+}
+.aboutus img {
+  margin: 3rem 0;
+  width: 100%;
+}
+
+main {
+  font-size: 1.3rem;
+  padding-bottom: 8vh;
+}
+main h1 {
+  font-family: "Ubuntu", Helvetica, Arial, Sans-serif;
+  color: hsl(0, 20%, 14%);
+  padding: 7vh 0 5vh 0;
+}
+
+section {
+  margin-top: 4vh;
+}
+section h2 {
+  padding-bottom: 2vh;
+}
+section img {
+  width: 300px;
+}
+section .products {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+section .products article {
+  width: 32%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+section .products article:nth-child(n) {
+  margin-right: 2%;
+  margin-bottom: 2%;
+}
+section .products article:nth-child(3n) {
+  margin-right: 0;
+}
+section .products article p {
+  flex: 1 1 100%;
+}
+section .products article img {
+  align-self: center;
+}
+section .products article img, section .products article h3, section .products article p {
+  margin: 3%;
+}
+section .products h3 {
+  font-size: 1.8rem;
+}
+section .products button {
+  background: linear-gradient(#dd7878, hsl(0, 60%, 34%));
+  padding: 1vw 0;
+  vertical-align: bottom;
+  width: 100%;
+  cursor: pointer;
+}
+section .buybtn, section .showProduct a, .showProduct section a {
+  background: linear-gradient(#dd7878, hsl(0, 60%, 34%));
+  padding: 2vh 0;
+  vertical-align: bottom;
+  color: hsl(39, 58%, 95%);
+  text-align: center;
+  text-decoration: none;
+  font-size: 1.7rem;
+  text-transform: uppercase;
+}
+
+.showProduct {
+  display: flex;
+  flex-direction: row;
+}
+.showProduct h2 {
+  margin: 2rem 0;
+}
+.showProduct .leftColumn > div:first-of-type {
+  display: flex;
+  background-color: white;
+}
+.showProduct .leftColumn > div > div:first-of-type {
+  width: 70%;
+}
+.showProduct .leftColumn > div > div:last-of-type {
+  width: 30%;
+}
+.showProduct img {
+  width: 100%;
+}
+.showProduct .leftColumn {
+  width: 75%;
+  border-right: hsl(0, 60%, 34%) 1px solid;
+}
+.showProduct .rightColumn {
+  width: 25%;
+  margin-left: 10px;
+}
+.showProduct .rightColumn p {
+  width: 100%;
+  line-height: 3rem;
+}
+.showProduct .rightColumn p:first-of-type {
+  margin-top: 3vh;
+}
+.showProduct .rightColumn span {
+  float: left;
+  width: 150px;
+}
+.showProduct a {
+  display: block;
+  margin-top: 0;
+}
+
+footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  flex: 1 1 100%;
+  border-top: 1px solid hsl(0, 20%, 14%);
+  padding-top: 8vh;
+}
+footer div {
+  width: 32%;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+}
+footer div:nth-child(n) {
+  margin-right: 2%;
+  margin-bottom: 2%;
+}
+footer div:nth-child(3n) {
+  margin-right: 0;
+}
+footer div .footerSoMe {
+  display: flex;
+  flex-direction: row;
+}
+footer div img {
+  opacity: 0.5;
+  padding: 5px 7px 0 0;
+  width: 2vw;
+}
+footer div:nth-child(3) {
+  background-color: hsla(0, 0%, 100%, 0.6);
+  padding-left: 0.5vw;
+}
+footer div a {
+  color: hsl(0, 20%, 14%);
+  text-decoration: none;
+}
+footer h3 {
+  height: 4vh;
+}
+footer form p {
+  height: 4vh;
+}
+
+form p {
+  line-height: 40px;
+}
+form label {
+  width: 30%;
+  display: inline-block;
+}
+form label.loginform {
+  width: 130px;
+}
+form input {
+  display: inline-block;
+  width: 60%;
+  height: 20px;
+  padding-left: 3px;
+}
+form .logininput {
+  width: 250px;
+}
+form .submitbtn {
+  width: 100px;
+  margin-left: 30%;
+  padding-left: 0;
+  height: 20px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+form .loginbtn {
+  margin-left: 0;
+}/*# sourceMappingURL=style.css.map */
