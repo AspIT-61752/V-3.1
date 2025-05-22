@@ -5,8 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>Edea skates</title>
+    <style>
+        .even {
+            background-color: #f200f2;
+        }
+
+        .odd {
+            background-color: #00ffff;
+        }
+    </style>
 </head>
-<body>
+<body class="<?php echo (date("i") % 2 == 0) ? "even" : "odd"; ?>">
     <?php 
         include "includes/topmenu.php";
 
