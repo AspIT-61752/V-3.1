@@ -6,16 +6,9 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>Edea skates</title>
     <style>
-        .even {
-            background-color: #f200f2;
-        }
-
-        .odd {
-            background-color: #00ffff;
-        }
     </style>
 </head>
-<body class="<?php echo (date("i") % 2 == 0) ? "even" : "odd"; ?>">
+<body class="<?php echo (date("i") % 2 == 0) ? "light" : "dark"; ?>">
     <?php 
         include "includes/topmenu.php";
 
