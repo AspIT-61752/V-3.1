@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <footer>
 
     <div>
@@ -12,15 +16,15 @@
         <a href="#">Kontakt</a>
         <p>Følg os:</p>
         <div class="footerSoMe">
-            <a href="#"><img src="../img/FacebookIcon-bw.png" alt="Facebook logo"></a>
-            <a href="#"><img src="../img/InstagramIcon-bw.png" alt="Instagram logo"></a>
-            <a href="#"><img src="../img/TwitterIcon-bw.png" alt="Twitter logo"></a>
-            <a href="#"><img src="../img/YoutubeIcon-bw.png" alt="YouTube logo"></a>
+            <a href="#"><img src="./img/FacebookIcon-bw.png" alt="Facebook logo"></a>
+            <a href="#"><img src="./img/InstagramIcon-bw.png" alt="Instagram logo"></a>
+            <a href="#"><img src="./img/TwitterIcon-bw.png" alt="Twitter logo"></a>
+            <a href="#"><img src="./img/YoutubeIcon-bw.png" alt="YouTube logo"></a>
         </div>
     </div>
     <div>
         <h3>Nyhedsbrev</h3>
-        <form action="newsletter-landing.php" method="post">
+        <form action="newsletter-handler.php" method="post">
             <p>
                 <label for="firstname">Fornavn: </label>
                 <input type="text" name="newsletter-firstname" placeholder="Fornavn">

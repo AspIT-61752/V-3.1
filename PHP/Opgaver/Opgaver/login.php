@@ -1,3 +1,28 @@
+<?php
+session_start();
+
+$users = [
+    "123" => "123",
+    "admin" => "1234",  // username => password
+    "tobias" => "abc123"
+];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login-submit'])) {
+    $username = trim($_POST['login-username']);
+    $password = trim($_POST['login-password']);
+
+    // Check if user exists and password matches
+    if (isset($users[$username]) && $users[$username] === $password) {
+        $_SESSION['loggedin_user'] = $username;
+        header("Location: welcome.php");
+        exit();
+    } else {
+        $error = "Forkert brugernavn eller adgangskode.";
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +43,9 @@
     <div class="content">
         <main>
         <h1>Login</h1>
+        <?php if (!empty($error)): ?>
+            <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+        <?php endif; ?>
         <form method="post">
             <p>
                 <label for="login-username" class="loginform">Brugernavn: </label>

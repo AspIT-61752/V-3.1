@@ -1,9 +1,7 @@
 <?php
 session_start();
-session_unset();
-session_destroy();
-header("Location: login.php");
-exit();
+
+$firstname = $_SESSION['newsletter_firstname'] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +11,7 @@ exit();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>Logout</title>
+    <title>Login</title>
 </head>
 <body class="light">
 
@@ -25,9 +23,9 @@ exit();
 
     <div class="content">
         <main>
-            <h1>Logout</h1>
-
-            <p>Du er nu logget ud!</p>
+        <h1>Kære <?php echo htmlspecialchars($firstname); ?></h1>
+        <p>Du er nu tilmeldt vores nyhedsbrev. Vi glæder os til hver måned at bringe dig spændende nyheder fra kunstskøjteløbets verden. Husk, at du altid kan afmelde dig nyhedsbrevet igen ved at følge linket i bunden af nyhedsbrevet. </p>
+        <p>Med venlig hilsen dit Edea team</p>
         </main>
 
         <?php include "includes/footer.php"; ?>
