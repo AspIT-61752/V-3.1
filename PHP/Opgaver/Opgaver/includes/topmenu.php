@@ -1,7 +1,12 @@
 <?php
-session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-include_once "../handlers/helper-functions.php"
+include_once "./handlers/helper-functions.php"
 ?>
 
 <nav class="top">
@@ -18,7 +23,7 @@ include_once "../handlers/helper-functions.php"
             <a href="logout.php">Log ud</a>
         <?php endif; ?>
         </li>     
-        <li class="carticon"><a href="#"><img src="../img/shopping-cart-solid.svg" alt="shopping cart icon"></a></li>
+        <li class="carticon"><a href="#"><img src="./img/shopping-cart-solid.svg" alt="shopping cart icon"></a></li>
         <li><a href="#">Min kurv</a></li>
     </ul>
 </nav>
