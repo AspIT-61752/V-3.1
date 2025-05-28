@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+include_once "./handlers/helper-functions.php";
+
 $users = [
     "123" => "123",
     "admin" => "1234",  // username => password
@@ -8,8 +10,8 @@ $users = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login-submit'])) {
-    $username = trim($_POST['login-username']);
-    $password = trim($_POST['login-password']);
+    $username = CleanText($_POST['login-username']);
+    $password = CleanText($_POST['login-password']);
 
     // Check if user exists and password matches
     if (isset($users[$username]) && $users[$username] === $password) {
@@ -44,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login-submit'])) {
         <main>
         <h1>Login</h1>
         <?php if (!empty($error)): ?>
-            <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+            <p style="color: red;"><?php echo CleanText($error); ?></p>
         <?php endif; ?>
         <form method="post">
             <p>

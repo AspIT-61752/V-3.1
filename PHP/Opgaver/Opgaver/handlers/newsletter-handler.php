@@ -1,9 +1,11 @@
 <?php
 session_start();
 
+include_once "./helper-functions.php";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit-newsletter'])) {
-    $firstname = htmlspecialchars(trim($_POST['newsletter-firstname']));
-    $email = htmlspecialchars(trim($_POST['newsletter-email']));
+    $firstname = CleanText($_POST['newsletter-firstname']);
+    $email = CleanText($_POST['newsletter-email']);
 
     $_SESSION['newsletter_firstname'] = $firstname;
     $_SESSION['newsletter_email'] = $email;

@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+include_once "../handlers/helper-functions.php"
 ?>
 
 <nav class="top">
@@ -12,7 +14,7 @@ session_start();
         <?php if (!isset($_SESSION['loggedin_user'])): ?>
             <a href="login.php">Login</a>
         <?php else: ?>
-            <span>Hej, <?php echo htmlspecialchars($_SESSION['loggedin_user']); ?>!</span>
+            <span>Hej, <?php echo CleanText($_SESSION['loggedin_user']); ?>!</span>
             <a href="logout.php">Log ud</a>
         <?php endif; ?>
         </li>     

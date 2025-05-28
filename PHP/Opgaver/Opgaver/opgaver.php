@@ -1,4 +1,5 @@
 <!-- https://tobi61752.aspitcloud.dk/V31/opgaver.php -->
+ <!-- https://www.php.net/manual/en/funcref.php -->
 
 <?php
 // Opg 5

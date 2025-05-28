@@ -1,15 +1,19 @@
 <?php
+session_start();
+
+include_once "./handlers/helper-functions.php";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newuser-submit'])) {
-    $username = trim($_POST['newuser-username']);
-    $password = trim($_POST['newuser-password']);
-    $passwordRepeat = trim($_POST['newuser-passwordrepeat']);
-    $firstname = trim($_POST['newuser-firstname']);
-    $lastname = trim($_POST['newuser-lastname']);
-    $address = trim($_POST['newuser-address']);
-    $postcode = trim($_POST['newuser-postcode']);
-    $country = trim(strtolower($_POST['newuser-country'])); // convert to lowercase to match 'danmark' or 'denmark'
-    $email = trim($_POST['newuser-email']);
-    $website = trim($_POST['newuser-website']);
+    $username = CleanText($_POST['newuser-username']);
+    $password = CleanText($_POST['newuser-password']);
+    $passwordRepeat = CleanText($_POST['newuser-passwordrepeat']);
+    $firstname = CleanText($_POST['newuser-firstname']);
+    $lastname = CleanText($_POST['newuser-lastname']);
+    $address = CleanText($_POST['newuser-address']);
+    $postcode = CleanText($_POST['newuser-postcode']);
+    $country = CleanText(strtolower($_POST['newuser-country'])); // convert to lowercase to match 'danmark' or 'denmark'
+    $email = CleanText($_POST['newuser-email']);
+    $website = CleanText($_POST['newuser-website']);
 
     $errors = [];
 
@@ -61,12 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newuser-submit'])) {
             <?php if (!empty($errors)): ?>
                 <div style="color:red;">
                     <?php foreach ($errors as $error): ?>
-                        <p><?php echo htmlspecialchars($error); ?></p>
+                        <p><?php echo CleanText($error); ?></p>
                     <?php endforeach; ?>
                 </div>
             <?php elseif (!empty($successMessage)): ?>
                 <div style="color:green;">
-                    <p><?php echo htmlspecialchars($successMessage); ?></p>
+                    <p><?php echo CleanText($successMessage); ?></p>
                 </div>
             <?php endif; ?>
         <form method="post">

@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+include_once "./handlers/helper-functions.php";
+
 // Redirect if not logged in
 if (!isset($_SESSION['loggedin_user'])) {
     header("Location: login.php");
@@ -27,7 +29,7 @@ $username = $_SESSION['loggedin_user'];
 
     <div class="content">
         <main>
-            <h1>Logget ind som: <?php echo htmlspecialchars($username); ?></h1>
+            <h1>Logget ind som: <?php echo CleanText($username); ?></h1>
         </main>
     </div>
 </body>

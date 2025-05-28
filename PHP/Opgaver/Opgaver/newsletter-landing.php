@@ -1,7 +1,9 @@
 <?php
 session_start();
 
-$firstname = $_SESSION['newsletter_firstname'] ?? null;
+include_once "./handlers/helper-functions.php";
+
+$firstname = CleanText($_SESSION['newsletter_firstname']) ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +25,7 @@ $firstname = $_SESSION['newsletter_firstname'] ?? null;
 
     <div class="content">
         <main>
-        <h1>Kære <?php echo htmlspecialchars($firstname); ?></h1>
+        <h1>Kære <?php echo CleanText($firstname); ?></h1>
         <p>Du er nu tilmeldt vores nyhedsbrev. Vi glæder os til hver måned at bringe dig spændende nyheder fra kunstskøjteløbets verden. Husk, at du altid kan afmelde dig nyhedsbrevet igen ved at følge linket i bunden af nyhedsbrevet. </p>
         <p>Med venlig hilsen dit Edea team</p>
         </main>
