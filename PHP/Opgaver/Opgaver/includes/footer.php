@@ -5,6 +5,11 @@ error_reporting(E_ALL);
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+include_once "./handlers/helper-functions.php";
+
+// Variables for the form
+$newsletterfirstnameError = $newsletteremailError = '';
 ?>
 
 <footer>
