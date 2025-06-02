@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-include_once "./handlers/helper-functions.php";
+include_once "./handlers/helper-functions.php"; 
 
 // Variables for the form
 $newsletterfirstnameError = $newsletteremailError = '';

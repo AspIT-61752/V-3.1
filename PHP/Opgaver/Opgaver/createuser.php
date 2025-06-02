@@ -3,7 +3,109 @@ session_start();
 
 include_once "./handlers/helper-functions.php";
 
+$usernameErr = $passwordErr = $passwordRepeatErr = $firstnameErr = $lastnameErr = $addressErr = $postcodeErr = $countryErr = $emailErr = $websiteErr = "";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newuser-submit'])) {
+
+    $errors = [];
+
+    if (empty($_POST['newuser-username'])) {
+        $usernameErr = "Brugernavn er påkrævet.";
+        $errors[] = $usernameErr;
+    }
+    else {
+        $username = CleanText($_POST['newuser-username']);
+    }
+
+    if (empty($_POST['newuser-password'])) {
+        $passwordErr = "Adgangskode er påkrævet.";
+        $errors[] = $passwordErr;
+    } else {
+        $password = CleanText($_POST['newuser-password']);
+    }
+
+    if (empty($_POST['newuser-passwordrepeat'])) {
+        $passwordRepeatErr = "Gentag adgangskode er påkrævet.";
+        $errors[] = $passwordRepeatErr;
+    }
+    if ($password !== $passwordRepeat) {
+        $errors[] = "Adgangskoderne matcher ikke.";
+    } 
+    else {
+        $passwordRepeat = CleanText($_POST['newuser-passwordrepeat']);
+    }
+
+    if (empty($_POST['newuser-firstname'])) {
+        $firstnameErr = "Fornavn er påkrævet.";
+        $errors[] = $firstnameErr;
+    } else {
+        $firstname = CleanText($_POST['newuser-firstname']);
+    }
+
+    if (empty($_POST['newuser-lastname'])) {
+        $lastnameErr = "Efternavn er påkrævet.";
+        $errors[] = $lastnameErr;
+    } else {
+        $lastname = CleanText($_POST['newuser-lastname']);
+    }
+
+    if (empty($_POST['newuser-address'])) {
+        $addressErr = "Adresse er påkrævet.";
+        $errors[] = $addressErr;
+    } else {
+        $address = CleanText($_POST['newuser-address']);
+    }
+
+    if (empty($_POST['newuser-postcode'])) {
+        $postcodeErr = "Postnummer er påkrævet.";
+        $errors[] = $postcodeErr;
+    } else {
+        $postcode = CleanText($_POST['newuser-postcode']);
+    }
+
+    if (empty($_POST['newuser-country'])) {
+        $countryErr = "Land er påkrævet.";
+        $errors[] = $countryErr;
+    } else {
+        $country = CleanText(strtolower($_POST['newuser-country'])); // convert to lowercase to match 'danmark' or 'denmark'
+    }
+
+    if (empty($_POST['newuser-email'])) {
+        $emailErr = "E-mail adresse er påkrævet.";
+        $errors[] = $emailErr;
+    } else {
+        $email = CleanText($_POST['newuser-email']);
+    }
+
+    $website = CleanText($_POST['newuser-website']);
+
+    // If all fields are filled, proceed with further validation
+    if (empty($usernameErr) && empty($passwordErr) && empty($passwordRepeatErr) && 
+        empty($firstnameErr) && empty($lastnameErr) && empty($addressErr) && 
+        empty($postcodeErr) && empty($countryErr) && empty($emailErr) && 
+        empty($websiteErr)) {
+        
+        // Here you can add further validation, e.g., checking if the username already exists
+        // or if the email is valid, etc.
+        
+        // For now, let's assume everything is valid and proceed to create the user
+        $_SESSION['loggedin_user'] = [
+            'username' => $username,
+            'password' => $password,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'address' => $address,
+            'postcode' => $postcode,
+            'country' => $country,
+            'email' => $email,
+            'website' => $website
+        ];
+        
+        // Redirect or show success message
+        header("Location: welcome.php");
+        exit();
+    }
+    
     $username = CleanText($_POST['newuser-username']);
     $password = CleanText($_POST['newuser-password']);
     $passwordRepeat = CleanText($_POST['newuser-passwordrepeat']);
@@ -14,8 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newuser-submit'])) {
     $country = CleanText(strtolower($_POST['newuser-country'])); // convert to lowercase to match 'danmark' or 'denmark'
     $email = CleanText($_POST['newuser-email']);
     $website = CleanText($_POST['newuser-website']);
-
-    $errors = [];
 
     // Check if country is Denmark and postcode is not 4 digits
     if ($country === "danmark" || $country === "denmark") {
