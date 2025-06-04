@@ -39,6 +39,50 @@ function DBClose($conn) {
     }
 }
 
+function DBSelect($Search, $Row) {
+    $sql = "SELECT * FROM `users` WHERE `$Row` = '$Search';";
+    $conn = DBConnect();
+    if (!$conn) {
+        return null;
+    }
+    $res = $conn->query($sql);
+    if ($res === false) {
+        echo "Error: " . $conn->error;
+        return null;
+    }
+    $data = [];
+    foreach ($res as $row) {
+        $data[] = $row;
+    }
+    DBClose($conn);
+    return $data;
+}
+
+function DBLogin($Username, $password) {
+    $conn = DBConnect();
+    if (!$conn) {
+        return false;
+    }
+
+    $sql = "SELECT * FROM `users` WHERE `Username` = '$Username' AND `Password` = PASSWORD('$password');";
+    echo "<br><br>SQL Query: $sql<br><br>";
+    $res = $conn->query($sql);
+    
+    if ($res === false) {
+        echo "Error: " . $conn->error;
+        DBClose($conn);
+        return false;
+    }
+
+    if ($res->num_rows > 0) {
+        DBClose($conn);
+        return true; // Login successful
+    } else {
+        DBClose($conn);
+        return false; // Login failed
+    }
+}
+
 function TestDB($conn) {
     $sql = "SELECT * FROM `users`;";
 
