@@ -89,6 +89,134 @@ function DBSelect($Search, $ColName) {
     return $data;
 }
 
+function DBAdvSearch($variable, $ColName, $table)
+{
+    $conn = DBConnect();
+    if (!$conn) {
+        return false;
+    }
+
+    // Sanitize inputs
+    $allowedTables = ['user', 'users'];
+    $cleanVariable = CleanDBText($variable);
+    $cleanColName = CleanDBText($ColName);
+    $cleanTable = CleanDBText($table);
+
+    if (!in_array($cleanTable, $allowedTables)) {
+        return null; // Invalid table name
+    }
+
+    // Prepare the SQL query
+    $sql = "SELECT * FROM `$cleanTable` WHERE `$cleanColName` = ?;";
+    $prepStatement = $conn->prepare($sql);
+    if (!$prepStatement) {
+        echo "Prepare failed: " . $conn->error;
+        DBClose($conn);
+        return false;
+    }
+    $prepStatement->bind_param("s", $cleanVariable);
+    $prepStatement->execute();
+
+    // Get data from the result
+    $res = $prepStatement->get_result();
+    $data = [];
+    foreach ($res as $row) {
+        $data[] = $row;
+    }
+
+    // Clean up
+    $prepStatement->close();
+    DBClose($conn);
+    return $data;
+}
+
+function DBDoesExistInDB($var, $colname, $table) {
+    $conn = DBConnect();
+    if (!$conn) {
+        return false;
+    }
+
+    // Get the data from the DB
+    $res = DBAdvSearch($var, $colname, $table);
+    if ($res === false) {
+        echo "Error: " . $conn->error;
+        DBClose($conn);
+        return false;
+    }
+    
+    // check if the result is empty
+    if (empty($res)) {
+        DBClose($conn);
+        return false; // Does not exist
+    } else {
+        DBClose($conn);
+        return true; // Exists
+    }
+
+}
+
+function CreateUser($userarr) {
+    // Fix it later
+    $conn = DBConnect();
+    if (!$conn) {
+        return false;
+    }
+
+    echo "<br>Creating user with the following data:<br>";
+    foreach ($userarr[0] as $key => $value) {
+        echo "[$key] => $value<br>";
+    }
+    // Count
+    echo "Count: " . count($userarr[0]) . "<br>";
+    
+    // User array in the correct order
+    if (!is_array($userarr[0]) && count($userarr[0]) == 9) {
+        echo "Invalid user data provided.";
+        // Show the is array and count
+        echo  "<br><br>" . "Is array: " . (is_array($userarr[0]) ? 'true' : 'false') . "<br>";
+        // show the entire array
+        echo "Array: <pre>" . print_r($userarr[0], true) . "</pre>";
+        DBClose($conn);
+        return false;
+    }
+    
+    $userParams = [
+        'Username' => CleanDBText($userarr[0]['Username']),
+        'Password' => CleanDBText($userarr[0]['Password']),
+        'Firstname' => CleanDBText($userarr[0]['Firstname']),
+        'Lastname' => CleanDBText($userarr[0]['Lastname']),
+        'Address' => CleanDBText($userarr[0]['Address']),
+        'Postcode' => CleanDBText($userarr[0]['Postcode']),
+        'Country' => CleanDBText($userarr[0]['Country']),
+        'Email' => CleanDBText($userarr[0]['Email']),
+        'Website' => CleanDBText($userarr[0]['Website'])
+    ];
+    
+    $sql = "INSERT INTO `user` (`ID`, `Username`, `Password`, `Firstname`, `Lastname`, `Address`, `Postcode`, `Country`, `Email`, `Website`) VALUES (NULL, ?, PASSWORD(?), ?, ?, ?, ?, ?, ?, ?);";
+    $prepStatement = $conn->prepare($sql);
+    if (!$prepStatement) {
+        echo "Prepare failed: " . $conn->error;
+        DBClose($conn);
+        return false;
+    }
+
+    $types = "sssssisss";
+    $prepStatement->bind_param($types, array_values($userParams));
+    $prepStatement->execute();
+
+    if ($prepStatement->affected_rows > 0) {
+        echo "User created successfully.";
+        $prepStatement->close();
+        DBClose($conn);
+        return true;
+    } else {
+        echo "Error creating user: " . $conn->error . "<br>" . "Affected rows: " . $prepStatement->affected_rows . "<br>" . "PrepError: " . $prepStatement->error; 
+        $prepStatement->close();
+        DBClose($conn);
+        return false;
+    }
+}
+
 // TODO: Make this more secure, use prepared statements
 // TODO: Add comments
 function DBLogin($Username, $password) {
@@ -97,7 +225,7 @@ function DBLogin($Username, $password) {
         return false;
     }
 
-    $sql = "SELECT * FROM `users` WHERE `Username` = '$Username' AND `Password` = PASSWORD('$password');";
+    $sql = "SELECT * FROM `user` WHERE `Username` = '$Username' AND `Password` = PASSWORD('$password');";
     echo "<br><br>SQL Query: $sql<br><br>";
     $res = $conn->query($sql);
     
@@ -114,10 +242,6 @@ function DBLogin($Username, $password) {
         DBClose($conn);
         return false; // Login failed
     }
-}
-
-function DBCreateUser($TODO) {
-        
 }
 
 // Delete this later
