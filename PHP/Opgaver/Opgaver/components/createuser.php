@@ -1,4 +1,12 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 include_once "./handlers/DB-handler.php";
 include_once "./handlers/helper-functions.php";
 
@@ -16,6 +24,10 @@ $conn = DBConnect();
     <p>
         <label for="password">Password</label>
         <input type="password" name="password" id="password" required>
+    </p>
+    <p>
+        <label for="passwordrepeat">Repeat Password</label>
+        <input type="password" name="passwordrepeat" id="passwordrepeat" required>
     </p>
     <p>
         <label for="firstname">firstname</label>
@@ -52,13 +64,16 @@ $conn = DBConnect();
 
 <?php
 echo "<h2>user Info</h2><br>";
-if (isset($_POST['username']) && isset($_POST['password'])) {
+if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passwordrepeat'])) {
     // Get and sanitize the username and password from the form
     $username = CleanText($_POST['username']);
     $password = CleanText($_POST['password']);
+    $passwordrepeat = CleanText($_POST['passwordrepeat']);
 
-    if (empty($username) || empty($password)) {
-        echo "Username and password cannot be empty.<br><br>";
+    if (empty($username) || empty($password) || empty($passwordrepeat)) {
+        echo "Username and both password fields cannot be empty.<br><br>";
+    } elseif ($password !== $passwordrepeat) {
+        echo "Passwords do not match. Please try again.<br><br>";
     } else {
         // Validate the credentials by comparing the provided username and password with the database
         echo "Username: $username<br>";

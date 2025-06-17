@@ -79,7 +79,7 @@ function DBSelect($Search, $ColName) {
     $res = $prepStatement->get_result();
     $data = [];
     // In case of multiple users with the same username, this will return all of them
-    foreach ($res as $row) {
+    while ($row = $res->fetch_assoc()) {
         $data[] = $row;
     }
 
@@ -155,6 +155,76 @@ function DBDoesExistInDB($var, $colname, $table) {
 
 }
 
+function GetUserID($Username) {
+    $conn = DBConnect();
+    if (!$conn) {
+        return false;
+    }
+
+    // Get the user ID
+    $sql = "SELECT `ID` FROM `user` WHERE `Username` = ?;";
+
+    // Prepare the statement
+    $prepStatement = $conn->prepare($sql);
+    $cleanUsername = CleanDBText($Username);
+    $prepStatement->bind_param("s", $cleanUsername);
+
+    // Execute the statement
+    $prepStatement->execute();
+    $res = $prepStatement->get_result();
+
+    // Handle the result
+    $userID = null;
+    if ($row = $res->fetch_assoc()) {
+        $userID = $row['ID'];
+    }
+
+    // Clean up and return data
+    $prepStatement->close();
+    DBClose($conn);
+
+    return $userID;
+}
+
+function DeleteUser($Username) {
+    $conn = DBConnect();
+    if (!$conn) {
+        return false;
+    }
+
+    // Get the user ID
+    $userID = GetUserID($Username);
+    if ($userID === false || $userID === null) {
+        echo "User not found or error retrieving user ID.";
+        DBClose($conn);
+        return false;
+    }
+
+    // Prepare the statement
+    $sql = "DELETE FROM `users` WHERE `ID` = ?;";
+
+    // Prepare
+    $prepStatement = $conn->prepare($sql);
+    $prepStatement->bind_param("i", $userID);
+    $prepStatement->execute();
+
+    // Get data
+    $res = $prepStatement->get_result();
+
+    // Check if the user was deleted
+    if ($prepStatement->affected_rows > 0) {
+        echo "User deleted successfully.";
+        $prepStatement->close();
+        DBClose($conn);
+        return true;
+    } else {
+        echo "Error deleting user: " . $conn->error . "<br>" . "Affected rows: " . $prepStatement->affected_rows . "<br>" . "PrepError: " . $prepStatement->error; 
+        $prepStatement->close();
+        DBClose($conn);
+        return false;
+    }
+}
+
 function CreateUser($userarr) {
     // Fix it later
     $conn = DBConnect();
@@ -186,7 +256,7 @@ function CreateUser($userarr) {
         'Firstname' => CleanDBText($userarr[0]['Firstname']),
         'Lastname' => CleanDBText($userarr[0]['Lastname']),
         'Address' => CleanDBText($userarr[0]['Address']),
-        'Postcode' => CleanDBText($userarr[0]['Postcode']),
+        'Postcode' => (int)CleanDBText($userarr[0]['Postcode']), // ensure integer
         'Country' => CleanDBText($userarr[0]['Country']),
         'Email' => CleanDBText($userarr[0]['Email']),
         'Website' => CleanDBText($userarr[0]['Website'])
@@ -201,7 +271,11 @@ function CreateUser($userarr) {
     }
 
     $types = "sssssisss";
-    $prepStatement->bind_param($types, array_values($userParams));
+    $params = array_values($userParams); // Unpack the associative array 🤢 into a numeric array 😁 (The trouble this has cause me)
+    $prepStatement->bind_param(
+        $types,
+        $params[0], $params[1], $params[2], $params[3], $params[4], $params[5], $params[6], $params[7], $params[8]
+    );
     $prepStatement->execute();
 
     if ($prepStatement->affected_rows > 0) {
@@ -241,16 +315,6 @@ function DBLogin($Username, $password) {
     } else {
         DBClose($conn);
         return false; // Login failed
-    }
-}
-
-// Delete this later
-function TestDB($conn) {
-    $sql = "SELECT * FROM `users`;";
-
-    $res = $conn->query($sql);
-    foreach ($res as $x => $row) {
-        echo "<br>Row $x: " . $row['ID'] . " - " . $row['Username'] . " - " . $row['Password'] . "<br>";
     }
 }
 
