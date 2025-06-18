@@ -349,4 +349,84 @@ function GetListOfNewProducts(bool $IsAscendingOrder = false, int $amount = 3) {
     return $data;
 }
 
+// Associative array with the key(s) being the column names and the values being the new values
+function UpdateUserInfo($AsoInfo) {
+    $conn = DBConnect();
+    if (!$conn) {
+        return false;
+    }
+
+    $sql = "UPDATE `users` SET ";
+    $params = [];
+    $types = '';
+    foreach ($AsoInfo as $key => $value) {
+
+        // Check all the possible keys, add them to the SQL query and the parameters array
+        if (in_array($key, ['Username', 'Password', 'Firstname', 'Lastname', 'Address', 'Postcode', 'Country', 'Email', 'Website'])) {
+            
+            // Check if the value is not null or empty
+            if ($value !== null && $value !== '') {
+                if ($key == 'Password') {
+                    // Hash the pass
+                    $sql .= "`$key` = PASSWORD(?), ";
+                }
+                else {
+                    $sql .= "`$key` = ?, ";
+                }
+    
+                $params[] = CleanDBText($value);
+                
+                if ($value == 'Postcode') {
+                    $types .= 'i';
+                }
+                else {
+                    $types .= 's';
+                }
+            }
+        }
+    }
+
+    // Remove the last comma and space from the query to avoid syntax errors
+    $sql = rtrim($sql, ', ') . " WHERE `ID` = ?;";
+    
+    // Get the user ID, probably have to check if the user is logged in by getting it from the session and then getting the ID from the DB 🤔 Do it later 
+    
+    if (!isset($_SESSION['loggedin_user'])) {
+        echo "No user logged in.";
+        DBClose($conn);
+        return false;
+    }
+    
+    $userID = GetUserID(Username: $_SESSION['loggedin_user']);
+    if ($userID === false || $userID === null) {
+        echo "User not found.";
+        DBClose($conn);
+        return false;
+    }
+
+    // Add it to the params
+    $params[] = $userID;
+    $types .= 'i'; // The User ID is an integer
+
+    // Prepare and execute
+    $prepStatement = $conn->prepare($sql);
+    if (!$prepStatement) {
+        echo "Prepare failed: " . $conn->error;
+        DBClose($conn);
+        return false;
+    }
+
+    $prepStatement->bind_param($types, ...$params);
+    
+    if ($prepStatement->execute()) {
+        echo "User information updated";
+        DBClose($conn);
+        return true;
+    } else {
+        echo "Error updating user information: " . $prepStatement->error;
+        DBClose($conn);
+        return false;
+    }
+}
+
 ?>
