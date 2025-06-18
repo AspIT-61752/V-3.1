@@ -318,4 +318,35 @@ function DBLogin($Username, $password) {
     }
 }
 
+function GetListOfNewProducts(bool $IsAscendingOrder = false, int $amount = 3) {
+    $conn = DBConnect();
+    if (!$conn) {
+        return [];
+    }
+
+    // A quick if statement to set the order direction
+    $order = $IsAscendingOrder ? 'ASC' : 'DESC';
+
+    // Adjust table and column names as needed
+    $sql = "SELECT * FROM `products` ORDER BY `PID` $order LIMIT $amount;";
+
+    $res = $conn->query($sql);
+    if ($res === false) {
+        echo "Error executing query: " . $conn->error;
+        DBClose($conn);
+        return [];
+    }
+    
+    // This should return an associative array of products of the specified amount
+    $data = [];
+    if ($res) {
+        while ($row = $res->fetch_assoc()) {
+            $data[] = $row;
+        }
+    }
+
+    DBClose($conn);
+    return $data;
+}
+
 ?>
