@@ -18,7 +18,7 @@ function DBConnect() {
 
     // Check if any of the parameters are empty
     if (empty($hostname) || empty($username) || empty($password) || empty($database)) {
-        echo "Database connection parameters are not set correctly.";
+        // echo "Database connection parameters are not set correctly.";
         return null;
     }
     
@@ -29,7 +29,7 @@ function DBConnect() {
         return null;
     }
     else {
-        echo "Connected successfully";
+        // // echo "Connected successfully";
         return $conn;
     }
 }
@@ -37,9 +37,9 @@ function DBConnect() {
 function DBClose($conn) {
     if ($conn) {
         mysqli_close($conn);
-        echo "Connection closed successfully";
+        // // echo "Connection closed successfully";
     } else {
-        echo "No connection to close";
+        // // echo "No connection to close";
     }
 }
 
@@ -68,7 +68,7 @@ function DBSelect($Search, $ColName) {
     $sql = "SELECT * FROM `users` WHERE `$ColName` = ?;";
     $prepStatement = $conn->prepare($sql);
     if (!$prepStatement) {
-        echo "Prepare failed: " . $conn->error;
+        // echo "Prepare failed: " . $conn->error;
         DBClose($conn);
         return null;
     }
@@ -110,7 +110,7 @@ function DBAdvSearch($variable, $ColName, $table)
     $sql = "SELECT * FROM `$cleanTable` WHERE `$cleanColName` = ?;";
     $prepStatement = $conn->prepare($sql);
     if (!$prepStatement) {
-        echo "Prepare failed: " . $conn->error;
+        // // echo "Prepare failed: " . $conn->error;
         DBClose($conn);
         return false;
     }
@@ -139,7 +139,7 @@ function DBDoesExistInDB($var, $colname, $table) {
     // Get the data from the DB
     $res = DBAdvSearch($var, $colname, $table);
     if ($res === false) {
-        echo "Error: " . $conn->error;
+        // // echo "Error: " . $conn->error;
         DBClose($conn);
         return false;
     }
@@ -195,7 +195,7 @@ function DeleteUser($Username) {
     // Get the user ID
     $userID = GetUserID($Username);
     if ($userID === false || $userID === null) {
-        echo "User not found or error retrieving user ID.";
+        // echo "User not found or error retrieving user ID.";
         DBClose($conn);
         return false;
     }
@@ -213,12 +213,12 @@ function DeleteUser($Username) {
 
     // Check if the user was deleted
     if ($prepStatement->affected_rows > 0) {
-        echo "User deleted successfully.";
+        // echo "User deleted successfully.";
         $prepStatement->close();
         DBClose($conn);
         return true;
     } else {
-        echo "Error deleting user: " . $conn->error . "<br>" . "Affected rows: " . $prepStatement->affected_rows . "<br>" . "PrepError: " . $prepStatement->error; 
+        // echo "Error deleting user: " . $conn->error . "<br>" . "Affected rows: " . $prepStatement->affected_rows . "<br>" . "PrepError: " . $prepStatement->error; 
         $prepStatement->close();
         DBClose($conn);
         return false;
@@ -232,20 +232,20 @@ function CreateUser($userarr) {
         return false;
     }
 
-    echo "<br>Creating user with the following data:<br>";
+    // echo "<br>Creating user with the following data:<br>";
     foreach ($userarr[0] as $key => $value) {
-        echo "[$key] => $value<br>";
+        // echo "[$key] => $value<br>";
     }
     // Count
-    echo "Count: " . count($userarr[0]) . "<br>";
+    // echo "Count: " . count($userarr[0]) . "<br>";
     
     // User array in the correct order
     if (!is_array($userarr[0]) && count($userarr[0]) == 9) {
-        echo "Invalid user data provided.";
+        // echo "Invalid user data provided.";
         // Show the is array and count
-        echo  "<br><br>" . "Is array: " . (is_array($userarr[0]) ? 'true' : 'false') . "<br>";
+        // echo  "<br><br>" . "Is array: " . (is_array($userarr[0]) ? 'true' : 'false') . "<br>";
         // show the entire array
-        echo "Array: <pre>" . print_r($userarr[0], true) . "</pre>";
+        // echo "Array: <pre>" . print_r($userarr[0], true) . "</pre>";
         DBClose($conn);
         return false;
     }
@@ -265,7 +265,7 @@ function CreateUser($userarr) {
     $sql = "INSERT INTO `user` (`ID`, `Username`, `Password`, `Firstname`, `Lastname`, `Address`, `Postcode`, `Country`, `Email`, `Website`) VALUES (NULL, ?, PASSWORD(?), ?, ?, ?, ?, ?, ?, ?);";
     $prepStatement = $conn->prepare($sql);
     if (!$prepStatement) {
-        echo "Prepare failed: " . $conn->error;
+        // echo "Prepare failed: " . $conn->error;
         DBClose($conn);
         return false;
     }
@@ -279,12 +279,12 @@ function CreateUser($userarr) {
     $prepStatement->execute();
 
     if ($prepStatement->affected_rows > 0) {
-        echo "User created successfully.";
+        // echo "User created successfully.";
         $prepStatement->close();
         DBClose($conn);
         return true;
     } else {
-        echo "Error creating user: " . $conn->error . "<br>" . "Affected rows: " . $prepStatement->affected_rows . "<br>" . "PrepError: " . $prepStatement->error; 
+        // echo "Error creating user: " . $conn->error . "<br>" . "Affected rows: " . $prepStatement->affected_rows . "<br>" . "PrepError: " . $prepStatement->error; 
         $prepStatement->close();
         DBClose($conn);
         return false;
@@ -300,20 +300,23 @@ function DBLogin($Username, $password) {
     }
 
     $sql = "SELECT * FROM `user` WHERE `Username` = '$Username' AND `Password` = PASSWORD('$password');";
-    echo "<br><br>SQL Query: $sql<br><br>";
+    // // echo "<br><br>SQL Query: $sql<br><br>";
     $res = $conn->query($sql);
     
     if ($res === false) {
-        echo "Error: " . $conn->error;
+        // echo "Error: " . $conn->error;
         DBClose($conn);
         return false;
     }
 
     if ($res->num_rows > 0) {
         DBClose($conn);
+        $_SESSION['loggedin_user'] = $Username; // Store the username in the session
+        // echo "Login successful for user: $Username<br>";
         return true; // Login successful
     } else {
         DBClose($conn);
+        // echo "Login failed for user: $Username<br>";
         return false; // Login failed
     }
 }
@@ -332,7 +335,7 @@ function GetListOfNewProducts(bool $IsAscendingOrder = false, int $amount = 3) {
 
     $res = $conn->query($sql);
     if ($res === false) {
-        echo "Error executing query: " . $conn->error;
+        // echo "Error executing query: " . $conn->error;
         DBClose($conn);
         return [];
     }
@@ -392,14 +395,14 @@ function UpdateUserInfo($AsoInfo) {
     // Get the user ID, probably have to check if the user is logged in by getting it from the session and then getting the ID from the DB 🤔 Do it later 
     
     if (!isset($_SESSION['loggedin_user'])) {
-        echo "No user logged in.";
+        // echo "No user logged in.";
         DBClose($conn);
         return false;
     }
     
     $userID = GetUserID(Username: $_SESSION['loggedin_user']);
     if ($userID === false || $userID === null) {
-        echo "User not found.";
+        // echo "User not found.";
         DBClose($conn);
         return false;
     }
@@ -411,7 +414,7 @@ function UpdateUserInfo($AsoInfo) {
     // Prepare and execute
     $prepStatement = $conn->prepare($sql);
     if (!$prepStatement) {
-        echo "Prepare failed: " . $conn->error;
+        // echo "Prepare failed: " . $conn->error;
         DBClose($conn);
         return false;
     }
@@ -419,11 +422,11 @@ function UpdateUserInfo($AsoInfo) {
     $prepStatement->bind_param($types, ...$params);
     
     if ($prepStatement->execute()) {
-        echo "User information updated";
+        // echo "User information updated";
         DBClose($conn);
         return true;
     } else {
-        echo "Error updating user information: " . $prepStatement->error;
+        // echo "Error updating user information: " . $prepStatement->error;
         DBClose($conn);
         return false;
     }

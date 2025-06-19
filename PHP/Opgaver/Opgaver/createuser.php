@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newuser-submit'])) {
                     <p><?php echo CleanText($successMessage); ?></p>
                 </div>
             <?php endif; ?> -->
-        <form method="post">
+        <!-- <form method="post">
             <p>
                 <label for="newuser-username">Brugernavn: </label>
                 <input type="text" name="newuser-username" placeholder="Brugernavn" class="logininput">
@@ -236,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newuser-submit'])) {
                 <input type="text" name="newuser-city" placeholder="By" disabled class="logininput">
                 
                 <!-- This is not on the site so ¯\_(ツ)_/¯ -->
-            </p>
+            <!--</p>
 
             <p>
                 <label for="newuser-country">Land: </label>
@@ -265,7 +265,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['newuser-submit'])) {
             <p>
                 <input type="submit" name="newuser-submit" value="Opret" class="submitbtn">
             </p>
-        </form>
+        </form> -->
+
+        <?php 
+        include "components/createuser.php";
+        ?>
 
         </main>
 

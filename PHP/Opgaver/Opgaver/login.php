@@ -1,18 +1,27 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 include_once "./handlers/helper-functions.php";
-
-$users = [
-    "123" => "123",
-    "admin" => "1234",  // username => password
-    "tobias" => "abc123"
-];
+include_once "./handlers/DB-handler.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login-submit'])) {
     $username = CleanText($_POST['login-username']);
     $password = CleanText($_POST['login-password']);
 
+    if (DBLogin($username, $password)) {
+        $_SESSION['loggedin_user'] = $username;
+        header("Location: welcome.php");
+        exit();
+    }
+    else {
+        $error = "Forkert brugernavn eller adgangskode.";
+    }
+    
     // Check if user exists and password matches
     if (isset($users[$username]) && $users[$username] === $password) {
         $_SESSION['loggedin_user'] = $username;
